@@ -29,7 +29,7 @@ class AgeConstraintNode(object):
             field1_alias,
             field2_column,
             field2_alias
-        ):
+    ):
         self.operator = operator
         self.value = value
         self.field1_column = field1_column
