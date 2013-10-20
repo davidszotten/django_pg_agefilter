@@ -1,6 +1,6 @@
 from django.db import models
 
-from django_pg_agefilter import AgeFilter
+from django_pg_agefilter import AgeFilter, get_age_filter
 
 
 class Member(models.Model):
@@ -16,15 +16,20 @@ class Application(models.Model):
 
 
 class ParticipantQuerySet(models.query.QuerySet):
-    def test(self, op, value):
-        return self.filter(
-            AgeFilter(
-                'application__event__start_date',
-                'member__date_of_birth',
-                op,
-                value,
+
+    def filter(self, *args, **kwargs):
+        """ Override the default filter to add age__ operators """
+        kwarg, op = get_age_filter(kwargs)
+        if kwarg is not None:
+            value = kwargs.pop(kwarg)
+            self = self.filter(AgeFilter(
+                    'application__event__start_date',
+                    'member__date_of_birth',
+                    op,
+                    value,
+                )
             )
-        )
+        return super(ParticipantQuerySet, self).filter(*args, **kwargs)
 
 
 class ParticipantManager(models.Manager):

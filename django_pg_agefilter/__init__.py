@@ -111,3 +111,21 @@ class AgeFilter(Q):
             field2.column,
             field2_alias,
         ), AND)
+
+
+def get_age_filter(kwargs):
+    operators = {
+        'exact': '= %s',
+        'gt': '> %s',
+        'gte': '>= %s',
+        'lt': '< %s',
+        'lte': '<= %s',
+    }
+    age_operators = dict(('age__%s' % key, val)
+        for key, val in operators.items())
+
+    for kwarg, op in age_operators.items():
+        if kwarg in kwargs:
+            return kwarg, op
+
+    return None, None
