@@ -10,6 +10,7 @@ setup(
     author = "David Szotten",
     author_email = "davidszotten@gmail.com",
     description = "Helpers to leverage postgres's age filter from django",
+    install_requires=read('requirements.txt').strip().split('\n'),
     license = "MIT",
     url = "https://github.com/davidszotten/django_pg_agefilter",
     packages=find_packages(exclude=['tests', 'tests.*']),
@@ -24,3 +25,4 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Topic :: Database',
     ],
+)
