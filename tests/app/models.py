@@ -1,6 +1,6 @@
 from django.db import models
 
-from django_pg_agefilter import AgeFilter, get_age_filter
+from django_pg_agefilter import get_age_mixin
 
 
 class Member(models.Model):
@@ -15,21 +15,14 @@ class Application(models.Model):
     event = models.ForeignKey(Event)
 
 
-class ParticipantQuerySet(models.query.QuerySet):
+AgeMixin = get_age_mixin(
+    'application__event__start_date',
+    'member__date_of_birth',
+)
 
-    def filter(self, *args, **kwargs):
-        """ Override the default filter to add age__ operators """
-        kwarg, op = get_age_filter(kwargs)
-        if kwarg is not None:
-            value = kwargs.pop(kwarg)
-            self = self.filter(AgeFilter(
-                    'application__event__start_date',
-                    'member__date_of_birth',
-                    op,
-                    value,
-                )
-            )
-        return super(ParticipantQuerySet, self).filter(*args, **kwargs)
+
+class ParticipantQuerySet(AgeMixin, models.query.QuerySet):
+    pass
 
 
 class ParticipantManager(models.Manager):

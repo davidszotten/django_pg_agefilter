@@ -2,7 +2,6 @@ from __future__ import absolute_import
 
 from datetime import date
 
-from django.core.exceptions import FieldError
 from django.test import TestCase
 
 from django_pg_agefilter import AgeFilter
@@ -19,45 +18,41 @@ def age_gt(value):
     )
 
 
-class TestFilter(TestCase):
+class Setup(object):
     def setUp(self):
         member = Member.objects.create(date_of_birth=date(2000, 1, 1))
         event = Event.objects.create(start_date=date(2010, 1, 1))
         application = Application.objects.create(event=event)
         Participant.objects.create(application=application, member=member)
 
-        self.assertEqual(
-            Participant.objects.count(),
-            1
-        )
+
+class TestFilter(Setup, TestCase):
 
     def test_basic(self):
         self.assertEqual(
-            Participant.objects.filter(age_gt(5)).count(),
+            Participant.objects.filter(age__gt=5).count(),
             1
         )
 
         self.assertEqual(
-            Participant.objects.filter(age_gt(15)).count(),
+            Participant.objects.filter(age__gt=15).count(),
             0
         )
 
-    def test_subquery(self):
+    def test_exclude(self):
         self.assertEqual(
-            Participant.objects.filter(id__in=
-                Participant.objects.filter(age_gt(5))
-            ).count(),
+            Participant.objects.exclude(age__gt=5).count(),
+            0
+        )
+
+        self.assertEqual(
+            Participant.objects.exclude(age__gt=15).count(),
             1
         )
 
-        self.assertEqual(
-            Participant.objects.filter(id__in=
-                Participant.objects.filter(age_gt(15))
-            ).count(),
-            0
-        )
 
-    def test_age_operator(self):
+class TestSubqueries(Setup, TestCase):
+    def test_basic(self):
         self.assertEqual(
             Participant.objects.filter(id__in=
                 Participant.objects.filter(age__gt=5)
@@ -72,24 +67,47 @@ class TestFilter(TestCase):
             0
         )
 
-    def test_exclude(self):
+    def test_exclude_inner(self):
         self.assertEqual(
-            Participant.objects.exclude(age_gt(5)).count(),
+            Participant.objects.filter(id__in=
+                Participant.objects.exclude(age__gt=5)
+            ).count(),
             0
         )
 
         self.assertEqual(
-            Participant.objects.exclude(age_gt(15)).count(),
+            Participant.objects.filter(id__in=
+                Participant.objects.exclude(age__gt=15)
+            ).count(),
             1
         )
 
-    def test_missing_field(self):
-        with self.assertRaises(FieldError):
-            Participant.objects.filter(
-                AgeFilter(
-                    'foo',
-                    'bar',
-                    "> %s",
-                    0,
-                )
-            )
+    def test_exclude_outer(self):
+        self.assertEqual(
+            Participant.objects.exclude(id__in=
+                Participant.objects.filter(age__gt=5)
+            ).count(),
+            0
+        )
+
+        self.assertEqual(
+            Participant.objects.exclude(id__in=
+                Participant.objects.filter(age__gt=15)
+            ).count(),
+            1
+        )
+
+    def test_exclude_both(self):
+        self.assertEqual(
+            Participant.objects.exclude(id__in=
+                Participant.objects.exclude(age__gt=5)
+            ).count(),
+            1
+        )
+
+        self.assertEqual(
+            Participant.objects.exclude(id__in=
+                Participant.objects.exclude(age__gt=15)
+            ).count(),
+            0
+        )
