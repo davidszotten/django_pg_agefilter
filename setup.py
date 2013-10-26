@@ -14,7 +14,7 @@ setup(
     license = "MIT",
     url = "https://github.com/davidszotten/django_pg_agefilter",
     packages=find_packages(exclude=['tests', 'tests.*']),
-    long_description=read('README'),
+    long_description=read('README.rst'),
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
