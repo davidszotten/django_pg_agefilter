@@ -3,9 +3,9 @@ python:
   - "2.7"
 
 env:
-  - DJANGO=1.6.8
-  - DJANGO=1.7.1
-  - DJANGO=-e git+https://github.com/django/django.git
+  - DJANGO="django==1.6.8"
+  - DJANGO="django==1.7.1"
+  - DJANGO="-e git+https://github.com/django/django.git"
 
 install:
   - python setup.py -q install
