@@ -1,0 +1,21 @@
+language: python
+python:
+  - "2.7"
+
+env:
+  - DJANGO="django==1.5.11"
+  - DJANGO="django==1.6.8"
+  - DJANGO="django==1.7.1"
+  # - DJANGO="-e git+https://github.com/django/django.git#egg=django"
+
+install:
+  - python setup.py -q install
+  - pip install -r test_requirements.txt
+  - pip install $DJANGO
+
+before_script:
+  - psql -c 'CREATE DATABASE django_pg_agefilter;' -U postgres
+
+script:
+  - coverage run --source=django_pg_agefilter runtests.py
+  - coverage report -m
