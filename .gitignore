@@ -1,1 +1,3 @@
 .coverage
+dist/
+django_pg_agefilter.egg-info/

@@ -26,8 +26,9 @@ class ParticipantQuerySet(AgeMixin, models.query.QuerySet):
 
 
 class ParticipantManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return ParticipantQuerySet(self.model, using=self._db)
+    get_query_set = get_queryset
 
 
 class Participant(models.Model):
