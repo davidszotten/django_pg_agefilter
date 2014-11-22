@@ -1,0 +1,17 @@
+language: python
+python:
+  - "2.7"
+
+env:
+  - DJANGO=1.6.8
+  - DJANGO=1.7.1
+  - DJANGO=-e git+https://github.com/django/django.git
+
+install:
+  - python setup.py -q install
+  - pip install -r test_requirements.txt
+  - pip install $DJANGO
+
+script:
+  - coverage run --source=django_pg_agefilter runtests.py
+  - coverage report -m
