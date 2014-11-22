@@ -12,6 +12,9 @@ install:
   - pip install -r test_requirements.txt
   - pip install $DJANGO
 
+before_script:
+  - psql -c 'CREATE DATABASE django_pg_agefilter;' -U postgres
+
 script:
   - coverage run --source=django_pg_agefilter runtests.py
   - coverage report -m
