@@ -21,6 +21,7 @@ class AgeConstraintNode(object):
         ) as int8
     )
     """
+    contains_aggregate = False
 
     def __init__(
             self,
