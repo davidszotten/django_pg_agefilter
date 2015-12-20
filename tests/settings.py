@@ -17,3 +17,7 @@ SECRET_KEY = 'secret'
 INSTALLED_APPS = (
     'tests.app',
 )
+
+SILENCED_SYSTEM_CHECKS = [
+    '1_7.W001',
+]

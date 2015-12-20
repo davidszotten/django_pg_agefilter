@@ -12,7 +12,6 @@ env:
 
 matrix:
   allow_failures:
-    - env: DJANGO="django==1.9"
     - env: DJANGO="-e git+https://github.com/django/django.git@master#egg=django"
 
 install:
