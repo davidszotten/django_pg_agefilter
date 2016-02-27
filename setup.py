@@ -6,7 +6,7 @@ def read(fname):
 
 setup(
     name = "django-pg-agefilter",
-    version = "0.0.2",
+    version = "0.0.3",
     author = "David Szotten",
     author_email = "davidszotten@gmail.com",
     description = "Helpers to leverage postgres's age filter from django",
