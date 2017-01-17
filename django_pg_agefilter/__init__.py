@@ -103,8 +103,8 @@ class AgeFilter(Q):
         field1_parts = field1_name.split(LOOKUP_SEP)
         field2_parts = field2_name.split(LOOKUP_SEP)
 
-        field1, joins1 = setup_joins_compat(query, field1_parts, opts, alias)
-        field2, joins2 = setup_joins_compat(query, field2_parts, opts, alias)
+        field1, _, _, joins1, _ = query.setup_joins(field1_parts, opts, alias)
+        field2, _, _, joins2, _ = query.setup_joins(field2_parts, opts, alias)
 
         field1_alias = joins1[-1]
         field2_alias = joins2[-1]
@@ -120,21 +120,6 @@ class AgeFilter(Q):
         )
 
         query.where.add(constraint, AND)
-
-
-def setup_joins_compat(query, *args, **kwargs):
-    # ugly compativility hack
-
-    version = django.VERSION[:2]
-    if version == (1, 5):
-        kwargs['dupe_multis'] = True
-
-    result = query.setup_joins(*args, **kwargs)
-    if version == (1, 5):
-        result = result[:-1]
-
-    field, _, _, joins, _ = result
-    return field, joins
 
 
 def get_age_mixin(field1, field2):
