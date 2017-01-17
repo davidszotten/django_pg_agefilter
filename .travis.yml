@@ -3,16 +3,14 @@ python:
   - "2.7"
 
 env:
-  - DJANGO="django==1.5.12"
-  - DJANGO="django==1.6.11"
-  - DJANGO="django==1.7.11"
-  - DJANGO="django==1.8.7"
-  - DJANGO="django==1.9.2"
-  - DJANGO="-e git+https://github.com/django/django.git@master#egg=django"
+  - DJANGO="django==1.8.17"
+  - DJANGO="django==1.9.12"
+  - DJANGO="django==1.10.5"
+  - DJANGO="https://github.com/django/django/archive/master.tar.gz"
 
 matrix:
   allow_failures:
-    - env: DJANGO="-e git+https://github.com/django/django.git@master#egg=django"
+    - env: DJANGO="https://github.com/django/django/archive/master.tar.gz"
 
 install:
   - python setup.py install
