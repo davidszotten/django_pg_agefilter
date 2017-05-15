@@ -1,5 +1,5 @@
 # because we use internals, we pin the django version
-django>=1.8,<1.11
+django>=1.8,<2.0
 
 # we only work with postgres
 psycopg2
