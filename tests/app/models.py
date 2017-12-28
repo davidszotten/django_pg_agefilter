@@ -12,7 +12,7 @@ class Event(models.Model):
 
 
 class Application(models.Model):
-    event = models.ForeignKey(Event)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
 
 AgeMixin = get_age_mixin(
@@ -32,7 +32,7 @@ class ParticipantManager(models.Manager):
 
 
 class Participant(models.Model):
-    member = models.ForeignKey(Member)
-    application = models.ForeignKey(Application)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    application = models.ForeignKey(Application, on_delete=models.CASCADE)
 
     objects = ParticipantManager()
